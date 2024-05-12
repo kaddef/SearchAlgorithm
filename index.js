@@ -1,6 +1,7 @@
 const canvas = document.getElementById("canvas")
 const ctx = canvas.getContext("2d")
 
+const selectModeHtml = document.getElementById("selectMode")
 const canvasWidth = canvas.width;
 const canvasHeight = canvas.height;
 const unitSize = 20;
@@ -91,13 +92,13 @@ class Astar {
     this.endNode = endNode;
     this.startNode.h_cost = GetDistance(startNode, endNode);
     startNode.setFCost();
-    console.log(startNode)
+    //console.log(startNode)
   }
 
   async Search() {
     this.open.unshift(this.startNode)
     while (this.open.length > 0 && !this.pathFound) {
-      await delay(50).then(()=>{
+      await delay(30).then(()=>{
       
         var currentNode = this.open[0]
   
@@ -224,23 +225,33 @@ document.addEventListener("keydown", function (event) {
   if (key === 'KeyY') {
     selectionMode = 1; //1 mean start mode
     console.log("Start Node Selection")
+    selectModeHtml.textContent = "Start Node Selection"
   }
   if (key === 'KeyU') {
     selectionMode = 2; //2 mean end mode
     console.log("End Node Selected")
+    selectModeHtml.textContent = "End Node Selection"
   }
   if (key === 'KeyH') {
     selectionMode = 3; //3 mean clearing space
     console.log("Clearing Space")
+    selectModeHtml.textContent = "Clear Obstacles"
   }
   if (key === 'KeyJ') {
     selectionMode = 4; //4 mean placing obstacle
     console.log("Obstacle Placement")
+    selectModeHtml.textContent = "Obstacle Placement"
   }
   if (key === 'KeyB') {
     printMatrixTable(matrix)
     console.log(`Start Node = ${JSON.stringify(startNode)}`)
     console.log(`End Node = ${JSON.stringify(endNode)}`)
+  }
+  if (key === 'KeyR') {
+    startNode = null;
+    endNode = null;
+    fillGridsWithNode()
+    console.log("Matrix Cleared")
   }
   if (key === 'Enter') {
     AstarSearch = new Astar(matrix, startNode, endNode)
@@ -259,9 +270,13 @@ canvas.addEventListener("click", function(event) {
   switch (selectionMode) {
     case 1:
       startNode = matrix[x][y];
+      ctx.fillStyle = "blue";
+      ctx.fillRect(startNode.y*unitSize,startNode.x*unitSize,unitSize,unitSize);
       break;
     case 2:
       endNode = matrix[x][y];
+      ctx.fillStyle = "magenta";
+      ctx.fillRect(endNode.y*unitSize,endNode.x*unitSize,unitSize,unitSize);
       break;
     case 3:
       matrix[x][y].walkable = true;
