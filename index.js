@@ -3,8 +3,72 @@ const ctx = canvas.getContext("2d")
 
 const canvasWidth = canvas.width;
 const canvasHeight = canvas.height;
-const unitSize = 50;
+const unitSize = 20;
 const cellSize = canvasWidth / unitSize;
+const readyMaze = [
+[1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1],
+[1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0],
+[1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0],
+[0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1],
+[1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0],
+[1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0],
+[1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1],
+[1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1],
+[0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1],
+[1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1],
+[0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1],
+[1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1],
+[1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0],
+[1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0],
+[0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1],
+[1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1],
+[1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1],
+[0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1],
+[1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+[1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1],
+[1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1],
+[1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1],
+[1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0],
+[1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1],
+[1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1],
+[1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1],
+[1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1],
+[0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1],
+[1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1],
+[1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1]
+]
+const readyMaze2 = [
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+  [1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1],
+  [1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
+  [1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0],
+  [0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0],
+  [1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0],
+  [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0],
+  [1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0],
+  [0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+  [1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1],
+  [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0],
+  [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1],
+  [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+  [1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0],
+  [1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0],
+  [1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0],
+  [1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0],
+  [1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0],
+  [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+  [1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0],
+  [1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1],
+  [0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1],
+  [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0],
+  [1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+  [1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+  [1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1]
+];
 var selectionMode = 4;
 var startNode;
 var endNode;
@@ -19,19 +83,95 @@ class Astar {
   closed = new Array();
   startNode;
   endNode;
+  pathFound = false;
   constructor(matrix, startNode, endNode) {
     this.matrix = matrix;
     this.startNode = startNode;
     this.startNode.g_cost = 0;
     this.endNode = endNode;
+    this.startNode.h_cost = GetDistance(startNode, endNode);
+    startNode.setFCost();
+    console.log(startNode)
   }
 
-  Search() {
+  async Search() {
+    this.open.unshift(this.startNode)
+    while (this.open.length > 0 && !this.pathFound) {
+      await delay(50).then(()=>{
+      
+        var currentNode = this.open[0]
+  
+        for(var i = 1; i < this.open.length; i++) {
+          if(this.open[i].f_cost < currentNode.f_cost || this.open[i].f_cost == currentNode.f_cost && this.open[i].h_cost < currentNode.h_cost) {
+            // Open set de bulunan en küçük fcost lu eleman current node atanır fcostlar eşitse hcost bakılır.
+            currentNode = this.open[i];
+          }
+        }
+  
+        //DEBUGGING Start
+        ctx.fillStyle = "blue";
+        ctx.fillRect(currentNode.y*unitSize,currentNode.x*unitSize,unitSize,unitSize);
+        drawGridCells();
+        //DEBUGGING End
 
+        let index = this.open.indexOf(currentNode);
+        this.open.splice(index, 1);
+        this.closed.unshift(currentNode);
+
+        if(currentNode === this.endNode) {
+          console.log("Found")
+          this.RetracePath(this.startNode, this.endNode)
+          this.pathFound = true;
+          return;
+        }
+  
+        GetNeighbours(currentNode).forEach(neighbour => {
+          if (!neighbour.walkable || this.closed.includes(neighbour)) {
+            return;
+          }
+          var costToNeighbour = currentNode.g_cost + GetDistance(currentNode, neighbour);
+          if(costToNeighbour < neighbour.g_cost || !this.open.includes(neighbour)) {
+            neighbour.g_cost = costToNeighbour;
+            neighbour.h_cost = GetDistance(neighbour,this.endNode)
+            neighbour.f_cost = neighbour.g_cost + neighbour.h_cost
+            neighbour.parent = currentNode;
+  
+            //DEBUGGING Start
+            ctx.fillStyle = "green";
+            ctx.fillRect(neighbour.y*unitSize,neighbour.x*unitSize,unitSize,unitSize);
+            //DEBUGGING End
+            if(!this.open.includes(neighbour)) this.open.unshift(neighbour)
+          }
+        });
+        
+        //DEBUGGING Start
+        ctx.fillStyle = "yellow";
+        ctx.fillRect(currentNode.y*unitSize,currentNode.x*unitSize,unitSize,unitSize);
+        drawGridCells();
+        //DEBUGGING End
+      })
+    }
+    if (!this.pathFound) {
+      console.log("CANNOT FIND A WAY");
+    }
   }
 
-  RetracePath() {
+  RetracePath(startNode, endNode) {
+    let currentNode = endNode;
+    var path = new Array();
 
+    while(currentNode != startNode) {
+      path.unshift(currentNode)
+      currentNode = currentNode.parent;
+    }
+    path.reverse()
+    path.push(startNode)
+    console.log(path)
+    for (let index = 0; index < path.length; index++) {
+      ctx.fillStyle = "purple";
+      ctx.fillRect(path[index].y*unitSize,path[index].x*unitSize,unitSize,unitSize);
+    }
+    drawGridCells();
   }
 }
 
@@ -103,15 +243,15 @@ document.addEventListener("keydown", function (event) {
     console.log(`End Node = ${JSON.stringify(endNode)}`)
   }
   if (key === 'Enter') {
-    // AstarSearch = new Astar(matrix, startNode, endNode)
-    // AstarSearch.Search();
+    AstarSearch = new Astar(matrix, startNode, endNode)
+    AstarSearch.Search();
   }
 })
 
 canvas.addEventListener("click", function(event) {
   var y = event.offsetX;
   var x = event.offsetY;
-
+  console.log(`X:${x}Y:${y}`)
   x = (Math.floor(x / unitSize) * unitSize)/unitSize;
   y = (Math.floor(y / unitSize) * unitSize)/unitSize;
   console.log(`X:${x}Y:${y}`)
@@ -137,6 +277,28 @@ canvas.addEventListener("click", function(event) {
       break;
   }
 })
+
+function GetNeighbours(node) {
+  //console.log(`GETTING NEIGHTBOURS OF THIS:${node.x}${node.y}`)
+  var neighbours = new Array()
+
+  for (let x = -1; x <= 1; x++) {
+    for (let y = -1; y <= 1; y++) {
+      if(x == 0 && y == 0) continue
+      var checkX = node.x + x;
+      var checkY = node.y + y;
+
+      if(checkX >= 0 && checkX < canvasHeight/unitSize && checkY >= 0 && checkY < canvasWidth/unitSize && matrix[checkX][checkY].walkable) {
+        neighbours.unshift(matrix[checkX][checkY]);
+      }
+      // if(checkX >= 0 && checkX < canvasHeight/unitSize && checkY >= 0 && checkY < canvasWidth/unitSize && matrix[checkX][checkY].walkable) {
+      //   neighbours.unshift(matrix[checkY][checkX]);
+      // }
+    }
+  }
+  //console.log(neighbours)
+  return neighbours;
+}
 
 function GetDistance(nodeA, nodeB) {
   // This function calculates distance between two nodes
@@ -180,5 +342,13 @@ async function fillGridsWithNode() {
   drawGridCells();
 }
 
+
 fillGridsWithNode();
+for (let x = 0; x < readyMaze2.length; x++) {
+  for (let y = 0; y < readyMaze2[0].length; y++) {
+    if(readyMaze2[x][y] == 1) matrix[x][y].walkable = true
+    else matrix[x][y].walkable = false
+    matrix[x][y].draw();
+  }
+}
 drawGridCells();
