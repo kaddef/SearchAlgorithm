@@ -13,6 +13,28 @@ const matrix = Array.from(Array(canvasWidth / unitSize), () =>
   new Array(canvasHeight / unitSize).fill(0)
 );
 
+class Astar {
+  matrix;
+  open = new Array();
+  closed = new Array();
+  startNode;
+  endNode;
+  constructor(matrix, startNode, endNode) {
+    this.matrix = matrix;
+    this.startNode = startNode;
+    this.startNode.g_cost = 0;
+    this.endNode = endNode;
+  }
+
+  Search() {
+
+  }
+
+  RetracePath() {
+
+  }
+}
+
 class Node {
   walkable;
   x;
@@ -115,6 +137,20 @@ canvas.addEventListener("click", function(event) {
       break;
   }
 })
+
+function GetDistance(nodeA, nodeB) {
+  // This function calculates distance between two nodes
+  // Yan yana duran iki Node arasindaki uzaklik 1, diyagonal nodelar arası uzaklık 1.4xxx
+  // olduğu için tam sayı olmaları amacıyla 10 ve 14 olarak alınmıştır.
+  var yDist = Math.abs(nodeA.y - nodeB.y)
+  var xDist = Math.abs(nodeA.x - nodeB.x)
+  if(yDist <= xDist) {
+    return yDist * 14 + (xDist - yDist) * 10
+  }
+  else {
+    return xDist * 14 + (yDist - xDist) * 10
+  }
+}
 
 function delay(time) {//For debugging
   return new Promise(resolve => setTimeout(resolve, time));
