@@ -4,7 +4,6 @@
     box-sizing: border-box;
 }
 
-
 body {
     min-height: 100vh;
     min-width: 100%;
@@ -16,15 +15,25 @@ body {
     justify-content: center;
     background-color: #232b2b;
 }
+
+@media only screen and (max-width: 915px) {
+    body {
+        flex-direction: column;
+        margin-top: 40px;
+    }
+  }
+
 p {
     color: #FBFAF5;
 }
+
 #canvas {
     width: 600px;
     height: 600px;
     image-rendering: pixelated;
     border: 1px solid #FBFAF5;
 }
+
 .infoSection {
     display: flex;
     flex-direction: column;
@@ -37,6 +46,7 @@ p {
 }
 
 .infoSection h1 {
+    text-align: center;
     font-weight: 900;
 }
 

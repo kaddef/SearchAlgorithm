@@ -109,11 +109,11 @@ class Astar {
           }
         }
   
-        //DEBUGGING Start
+        //VISUALIZATION Start
         ctx.fillStyle = "blue";
         ctx.fillRect(currentNode.y*unitSize,currentNode.x*unitSize,unitSize,unitSize);
         drawGridCells();
-        //DEBUGGING End
+        //VISUALIZATION End
 
         let index = this.open.indexOf(currentNode);
         this.open.splice(index, 1);
@@ -137,22 +137,25 @@ class Astar {
             neighbour.f_cost = neighbour.g_cost + neighbour.h_cost
             neighbour.parent = currentNode;
   
-            //DEBUGGING Start
+            //VISUALIZATION Start
             ctx.fillStyle = "green";
             ctx.fillRect(neighbour.y*unitSize,neighbour.x*unitSize,unitSize,unitSize);
-            //DEBUGGING End
+            //VISUALIZATION End
             if(!this.open.includes(neighbour)) this.open.unshift(neighbour)
           }
         });
         
-        //DEBUGGING Start
+        //VISUALIZATION Start
         ctx.fillStyle = "yellow";
         ctx.fillRect(currentNode.y*unitSize,currentNode.x*unitSize,unitSize,unitSize);
         drawGridCells();
-        //DEBUGGING End
+        //VISUALIZATION End
       })
     }
     if (!this.pathFound) {
+      selectModeHtml.textContent = "There's no way to the target"
+      console.log(selectModeHtml.style.color);
+      selectModeHtml.style.color = "red";
       console.log("CANNOT FIND A WAY");
     }
   }
